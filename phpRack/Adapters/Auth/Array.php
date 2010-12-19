@@ -23,8 +23,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Array.php 616 2010-07-19 09:47:43Z yegor256@yahoo.com $
+ * @version $Id: Array.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
 
 /**
@@ -48,13 +49,31 @@ class phpRack_Adapters_Auth_Array extends phpRack_Adapters_Auth_Abstract
      */
     public function authenticate()
     {
-        foreach ($this->_options['htpasswd'] as $login => $password) {
-            if (($login == $this->_request['login'])
-                && (md5($password) == $this->_request['hash'])
-            ) {
-                return $this->_validated(true);
+        if (strlen($this->_request['hash']) != 32) {
+            // This situation is a clear indicator of something wrong
+            // in phpRack configuration. "hash" should contain MD5 hash.
+            return $this->_validated(
+                false,
+                "Invalid password hash: '{$this->_request['hash']}'"
+            );
+        }
+
+        $htpasswd =& $this->_options['htpasswd'];
+        foreach (array_keys($htpasswd) as $login) {
+            if ($login == $this->_request['login']) {
+                $user = $login;
             }
         }
-        return $this->_validated(false, 'Invalid login credentials provided');
+        if (!isset($user)) {
+            return $this->_validated(false, 'Invalid user name');
+        }
+
+        $password = $htpasswd[$user];
+        if (md5($password) != $this->_request['hash']) {
+            return $this->_validated(false, 'Invalid password provided');
+        }
+
+        // everything is fine
+        return $this->_validated(true);
     }
 }

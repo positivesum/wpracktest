@@ -23,8 +23,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Formatter.php 611 2010-07-12 14:23:40Z yegor256@yahoo.com $
+ * @version $Id: Formatter.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
 
 /**

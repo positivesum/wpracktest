@@ -23,8 +23,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Sendmail.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Sendmail.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
 
 /**
@@ -36,12 +37,13 @@ require_once PHPRACK_PATH . '/Adapters/Notifier/Mail/Abstract.php';
  * Sendmail implementation of phpRack mail
  *
  * @see phpRack_Notifier_Mail_Abstract
+ * @package Adapters
  */
 class phpRack_Adapters_Notifier_Mail_Sendmail extends phpRack_Adapters_Notifier_Mail_Abstract
 {
     /**
      * Preparing and sending mail.
-     * 
+     *
      * Function returns result of the operation
      *
      * @return bool
@@ -74,11 +76,11 @@ class phpRack_Adapters_Notifier_Mail_Sendmail extends phpRack_Adapters_Notifier_
         $headers['MIME-Version'] = '1.0';
         $headers['Content-Type'] = 'text/plain; charset=UTF-8';
         $headers['Content-transfer-encoding'] = 'base64';
-        
+
         return implode(
-            "\r\n", 
+            "\r\n",
             array_map(
-                create_function('$v, $k', 'return $k . ": " . $v;'), 
+                create_function('$v, $k', 'return $k . ": " . $v;'),
                 $headers,
                 array_keys($headers)
             )

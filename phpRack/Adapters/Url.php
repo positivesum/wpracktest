@@ -3,7 +3,7 @@
  * phpRack: Integration Testing Framework
  *
  * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt. It is also available 
+ * with this package in the file LICENSE.txt. It is also available
  * through the world-wide-web at this URL: http://www.phprack.com/LICENSE.txt
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
@@ -23,8 +23,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Url.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Url.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
 
 /**

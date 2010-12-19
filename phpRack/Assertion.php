@@ -3,7 +3,7 @@
  * phpRack: Integration Testing Framework
  *
  * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt. It is also available 
+ * with this package in the file LICENSE.txt. It is also available
  * through the world-wide-web at this URL: http://www.phprack.com/LICENSE.txt
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
@@ -23,8 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Assertion.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Assertion.php 714 2010-12-17 09:22:17Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Tests
+ * @subpackage core
  */
 
 /**
@@ -45,12 +47,21 @@ require_once PHPRACK_PATH . '/Test.php';
 /**
  * One single test assertion
  *
- * @package Tests
  * @see phpRack_Test::__get()
+ * @property-read phpRack_Package_Cpu $cpu CPU related assertions
+ * @property-read phpRack_Package_Db $db DB related assertions
+ * @property-read phpRack_Package_Disc $disc Local HDD related assertions
+ * @property-read phpRack_Package_Network $network Network-related assertions
+ * @property-read phpRack_Package_Php $php PHP related assertions
+ * @property-read phpRack_Package_Qos $qos QOS related assertions
+ * @property-read phpRack_Package_Shell $shell Assertions related to SHELL
+ * @property-read phpRack_Package_Simple $simple Simple package, for simple assertions
+ * @package Tests
+ * @subpackage core
  */
 class phpRack_Assertion
 {
-    
+
     /**
      * Result collector
      *
@@ -58,7 +69,7 @@ class phpRack_Assertion
      * @see __construct()
      */
     protected $_result;
-    
+
     /**
      * Construct the class
      *
@@ -84,11 +95,11 @@ class phpRack_Assertion
      * @return phpRack_Assertion
      * @see phpRack_Test::__get()
      */
-    public static function factory(phpRack_Test $test) 
+    public static function factory(phpRack_Test $test)
     {
         return new self($test);
     }
-    
+
     /**
      * Dispatcher of calls to packages
      *
@@ -96,17 +107,17 @@ class phpRack_Assertion
      * @return phpRack_Package
      * @see phpRack_Test::_log() and many other methods inside Integration Tests
      */
-    public function __get($name) 
+    public function __get($name)
     {
         return phpRack_Package::factory($name, $this->_result);
     }
-        
+
     /**
      * Call method, any one
      *
-     * This magic method will be called when you're using any assertion and 
+     * This magic method will be called when you're using any assertion and
      * some method inside it, for example:
-     * 
+     *
      * <code>
      * // inside your instance of phpRack_Test:
      * $this->assert->php->extensions->isLoaded('simplexml');
@@ -120,7 +131,7 @@ class phpRack_Assertion
      * @return mixed
      * @see PhpConfigurationTest::testPhpExtensionsExist isLoaded() reaches this point
      */
-    public function __call($name, array $args) 
+    public function __call($name, array $args)
     {
         return call_user_func_array(
             array(
@@ -129,17 +140,17 @@ class phpRack_Assertion
             ),
             $args
         );
-    }    
-    
+    }
+
     /**
      * Get instance of result collector
      *
      * @return phpRack_Result
      * @see phpRack_Test::_log() and many other methods inside Integration Tests
      */
-    public function getResult() 
+    public function getResult()
     {
         return $this->_result;
     }
-    
+
 }

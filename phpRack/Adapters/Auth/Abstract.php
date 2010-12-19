@@ -22,14 +22,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright Copyright (c) phpRack.com
- * @version $Id: Abstract.php 619 2010-07-19 10:22:05Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
+ * @copyright Copyright (c) phpRack.com
+ * @version $Id: Abstract.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  */
 
 /**
  * Authentication abstract adapter
  *
+ * @category phpRack
  * @package Adapters
  * @subpackage Auth
  */

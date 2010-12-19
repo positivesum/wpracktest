@@ -23,10 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Os.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Os.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
-
 
 /**
  * OS adapter used to get information where script is executed
@@ -55,7 +55,7 @@ class phpRack_Adapters_Os
             /* windows */
             case (substr(PHP_OS, 0, 3) === 'WIN'):
                 return self::WINDOWS;
-                
+
             /* Mac OS and Mac OS X */
             case (substr(PHP_OS, 0, 6) === 'Darwin'):
                 return self::DARWIN;
@@ -63,13 +63,13 @@ class phpRack_Adapters_Os
             /* Linux */
             case (substr(PHP_OS, 0, 5) === 'Linux'):
                 return self::LINUX;
-                
+
             /* all other systems */
             default:
                 throw new Exception('Unknown operating system');
         }
     }
-    
+
     /**
      * Is it *NIX system?
      *
@@ -78,7 +78,7 @@ class phpRack_Adapters_Os
      *
      * @return boolean
      */
-    public static function isUnix() 
+    public static function isUnix()
     {
         return (self::get() != self::WINDOWS);
     }

@@ -23,10 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Cpu.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Cpu.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
-
 
 /**
  * CPU adapter used to get details about available processor
@@ -53,7 +53,7 @@ class phpRack_Adapters_Cpu
         require_once PHPRACK_PATH . '/Adapters/Os.php';
         $os = phpRack_Adapters_Os::get();
         $classFile = PHPRACK_PATH . '/Adapters/Cpu/' . ucfirst($os) . '.php';
-        
+
         if (!file_exists($classFile)) {
             throw new Exception("OS '{$os}' is not supported yet");
         }

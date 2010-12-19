@@ -98,7 +98,7 @@ abstract class phpRack_Test
         'tags'               => array(), // used for store available options for parametrized test
         'tag'                => null // selected tag param from front end
     );
-	
+
     /**
      * Construct the class
      * 

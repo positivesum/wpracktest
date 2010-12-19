@@ -23,8 +23,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Mail.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Mail.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
 
 /**
@@ -36,7 +37,7 @@ class phpRack_Adapters_Notifier_Mail
 {
     /**
      * Factory method to get one of Sendmail or Smtp class instances.
-     * 
+     *
      * Depends on options specified. Available options depend on transport
      * you choose.
      *

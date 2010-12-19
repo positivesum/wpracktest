@@ -23,8 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Result.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Result.php 714 2010-12-17 09:22:17Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Tests
+ * @subpackage core
  */
 
 /**
@@ -35,8 +37,9 @@ require_once PHPRACK_PATH . '/Test.php';
 /**
  * Result of a test execution
  *
+ * @see phpRack_Assertion#__construct()
  * @package Tests
- * @see phpRack_Assertion::__construct()
+ * @subpackage core
  */
 class phpRack_Result
 {

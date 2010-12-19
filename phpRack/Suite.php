@@ -23,8 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Suite.php 611 2010-07-12 14:23:40Z yegor256@yahoo.com $
+ * @version $Id: Suite.php 714 2010-12-17 09:22:17Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Tests
+ * @subpackage core
  */
 
 /**
@@ -36,6 +38,7 @@
  * tests, which can be added to the suite by means of {@link _addTest()}.
  *
  * @package Tests
+ * @subpackage core
  */
 abstract class PhpRack_Suite
 {

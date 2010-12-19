@@ -23,8 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Runner.php 628 2010-07-25 15:27:29Z yegor256@yahoo.com $
+ * @version $Id: Runner.php 714 2010-12-17 09:22:17Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Tests
+ * @subpackage core
  */
 
 /**
@@ -52,8 +54,9 @@ require_once PHPRACK_PATH . '/Suite.php';
  * This code will give you a plain-text report of all tests in your collection,
  * executed and logged.
  *
- * @package Tests
  * @see bootstrap.php
+ * @package Tests
+ * @subpackage core
  */
 class phpRack_Runner
 {
@@ -75,7 +78,7 @@ class phpRack_Runner
      * @see getTests()
      */
     const SUITE_PATTERN = '/(\w+Suite)\.php$/i';
-    
+
     /**
      * List of options, which are changeable
      *
@@ -177,7 +180,7 @@ class phpRack_Runner
      * Get full list of tests, in array
      *
      * This method builds a list of phpRack_Test class instances, collecting
-     * them from integration 1) tests and 2) suites. They both are located in 
+     * them from integration 1) tests and 2) suites. They both are located in
      * the same directory (pre-configured in $phpRackConfig), but differ only
      * in file name suffix. Integration test ends with "...Test.php" and integration
      * suite ends with "...Suite.php".
@@ -274,7 +277,6 @@ class phpRack_Runner
     public function run($fileName, $token = 'token', $options = array())
     {
         if (!$this->getAuth()->isAuthenticated()) {
-            //TODO: handle situation when login screen should appear
             throw new Exception("Authentication failed, please login first");
         }
         $test = phpRack_Test::factory($fileName, $this);
@@ -343,7 +345,11 @@ class phpRack_Runner
                 $class = 'sendmail';
             }
             $mail = phpRack_Adapters_Notifier_Mail::factory($class, $transport);
-            $mail->setSubject('phpRack Suite Failure');
+            $mail->setSubject(
+                'phpRack Suite Failure'
+                . (isset($this->_options['notify']['title']) ?
+                ' at ' . $this->_options['notify']['title'] : false)
+            );
             $mail->setBody($report);
             /**
              * @todo Only one recipient is supported now

@@ -23,8 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: View.php 594 2010-07-02 05:35:01Z yegor256@yahoo.com $
+ * @version $Id: View.php 714 2010-12-17 09:22:17Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Tests
+ * @subpackage core
  */
 
 /**
@@ -49,12 +51,13 @@ require_once PHPRACK_PATH . '/Test.php';
  * In this example, you can access "name" inside "index.phtml" like this:
  * $this->name.
  *
- * @package Tests
  * @see bootstrap.php
+ * @package Tests
+ * @subpackage core
  */
 class phpRack_View
 {
-    
+
     /**
      * Injected variables
      *
@@ -73,14 +76,14 @@ class phpRack_View
      * @return mixed
      * @see $this->_injected
      */
-    public function __get($name) 
+    public function __get($name)
     {
         if (array_key_exists($name, $this->_injected)) {
             return $this->_injected[$name];
         }
         throw new Exception("Property '{$name}' is absent in " . get_class($this));
     }
-    
+
     /**
      * Inject variables into class
      *
@@ -89,7 +92,7 @@ class phpRack_View
      * @return $this
      * @see bootstrap.php
      */
-    public function assign(array $injects) 
+    public function assign(array $injects)
     {
         foreach ($injects as $name=>$value) {
             $this->_injected[$name] = $value;
@@ -108,7 +111,7 @@ class phpRack_View
     {
         // two-step view, with layout
         $this->assign(array('script' => $script));
-        
+
         ob_start();
         // workaround against ZCA static code analysis
         eval("include PHPRACK_PATH . '/layout/layout.phtml';");
@@ -127,7 +130,36 @@ class phpRack_View
     {
         return addcslashes($path, "\\'");
     }
-    
+
+    /**
+     * Compress JS code
+     *
+     * @param string Javascript code, before compression
+     * @return string Javascript code, compressed
+     * @see compressedHtml
+     */
+    protected function _compressJs($jsCode)
+    {
+        // don't compress code when we use instrumented version, to avoid errors after compression
+        if (defined('INSTRUMENTED')) {
+            return $jsCode;
+        }
+
+        $replacers = array(
+            '/\/\*.*?\*\//s'   => '', // remove multi line comments
+            '/\/\/.*\r?\n\s*/' => '', // remove single line comments
+            '/\s*\r?\n\s*/'    => '', // remove lines end with leading/trailing spaces
+            '/\s+/'            => ' ', // convert multiple spaces to single
+            '/\s?([\(\)\,\;=\'\"\-\+:\*&])\s?/' => '${1}', // compress unnecessary spaces
+        );
+
+        return preg_replace(
+            array_keys($replacers),
+            $replacers,
+            $jsCode
+        );
+    }
+
     /**
      * Compress HTML content
      *
@@ -136,6 +168,44 @@ class phpRack_View
      */
     public function compressedHtml($html)
     {
+        if (!class_exists('DOMDocument')) {
+            $replacers = array(
+                '/<!--.*?-->/s'    => '', // remove multi line comments
+            );
+            $html = preg_replace(
+                array_keys($replacers),
+                $replacers,
+                $html
+            );
+            $offset = 0;
+            $startPattern = '<script type="text/javascript">';
+            $endPattern = '</script>';
+            $lp = 0;
+
+            while (($scriptStartPos = strpos($html, $startPattern, $offset)) !== false) {
+                $offset = $scriptStartPos + 1;
+
+                // first script is minified jQuery lib, so doesn't need additional compression
+                if (++$lp === 1) {
+                    continue;
+                }
+
+                $scriptEndPos = strpos($html, $endPattern, $scriptStartPos);
+                if ($scriptEndPos === false) {
+                    throw new Exception('<script> tag is not closed');
+                }
+                $length = $scriptEndPos - $scriptStartPos + 1;
+                $html = substr_replace(
+                    $html,
+                    $this->_compressJs(substr($html, $scriptStartPos, $length)),
+                    $scriptStartPos,
+                    $length
+                );
+            }
+
+            return $html;
+        }
+
         $dom = new DOMDocument();
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = false;
@@ -148,25 +218,13 @@ class phpRack_View
             $comment->parentNode->removeChild($comment);
         }
 
-        $replacers = array(
-            '/\/\*.*?\*\//s'   => '', // remove multi line comments
-            '/\/\/.*\r?\n\s*/' => '', // remove single line comments
-            '/\s*\r?\n\s*/'    => '', // remove lines end with leading/trailing spaces
-            '/\s+/'            => ' ', // convert multiple spaces to single
-            '/\s?([\(\)\,\;=\'\"\-\+:\*&])\s?/' => '${1}', // compress unnecessary spaces
-        );
-
         // skip compressing first script, because it is minified version of jQuery
         $scripts = $xpath->query('//xhtml:script[position() > 1]');
 
         foreach ($scripts as $script) {
             foreach ($script->childNodes as $childNode) {
                 if ($childNode->nodeType == XML_CDATA_SECTION_NODE) {
-                    $childNode->nodeValue = "\n" . preg_replace(
-                        array_keys($replacers),
-                        $replacers,
-                        $childNode->nodeValue
-                    );
+                    $childNode->nodeValue = "\n" . $this->_compressJs($childNode->nodeValue);
                 }
             }
         }
@@ -175,14 +233,14 @@ class phpRack_View
          */
         return preg_replace('/<!\[CDATA\[\s*(\/\/)?\]\]>/', '//', $dom->saveXml());
     }
-    
+
     /**
      * Return a compressed version of CSS
      *
      * @param string Relative path of CSS script, inside /layout dir
      * @return string CSS content compressed
      */
-    public function compressedCss($css) 
+    public function compressedCss($css)
     {
         $content = file_get_contents(PHPRACK_PATH . '/layout/' . $css);
         $replacers = array(
@@ -198,5 +256,5 @@ class phpRack_View
             $content
         );
     }
-    
+
 }

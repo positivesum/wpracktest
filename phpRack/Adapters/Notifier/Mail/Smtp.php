@@ -23,8 +23,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: Smtp.php 545 2010-05-04 09:40:46Z yegor256@yahoo.com $
+ * @version $Id: Smtp.php 706 2010-12-16 21:28:44Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Adapters
  */
 
 /**
@@ -36,6 +37,7 @@ require_once PHPRACK_PATH . '/Adapters/Notifier/Mail/Abstract.php';
  * Smtp implementation of phpRack mail
  *
  * @see phpRack_Notifier_Mail_Abstract
+ * @package Adapters
  */
 class phpRack_Adapters_Notifier_Mail_Smtp
     extends phpRack_Adapters_Notifier_Mail_Abstract
@@ -189,8 +191,8 @@ class phpRack_Adapters_Notifier_Mail_Smtp
      *
      * Second parameter used as time limit for read stream
      *
-     * @var int|array $code
-     * @var int Timeout (Default: 300)
+     * @param int|array $code
+     * @param int Timeout (Default: 300)
      * @throws Exception if can't change stream timeout
      * @throws Exception if can't read from the socket
      * @see _log()

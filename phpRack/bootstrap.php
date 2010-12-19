@@ -23,8 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright Copyright (c) phpRack.com
- * @version $Id: bootstrap.php 627 2010-07-22 16:59:48Z yegor256@yahoo.com $
+ * @version $Id: bootstrap.php 712 2010-12-17 08:44:42Z yegor256@yahoo.com $
  * @category phpRack
+ * @package Tests
+ * @subpackage core
  */
 
 /**
